@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+
+# from django.conf.global_settings import AUTH_USER_MODEL
+
 from online_shop.local_settings import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -36,10 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'user.apps.UserConfig',
     'product.apps.ProductConfig',
-    'category.apps.CategoryConfig'
+    'category.apps.CategoryConfig',
+    'account'
 ]
+AUTH_USER_MODEL = 'account.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -50,6 +54,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+]
+
+AUTHENTICATION_BACKENDS = [
+    'account.backends.MyBackend'
 ]
 
 ROOT_URLCONF = 'online_shop.urls'

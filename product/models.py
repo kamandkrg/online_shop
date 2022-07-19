@@ -10,4 +10,4 @@ class Product(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     description = models.TextField()
-
+    price = models.PositiveBigIntegerField(default=0)
