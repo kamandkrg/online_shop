@@ -1,0 +1,44 @@
+{% load static %}
+<!doctype html>
+<!--
+Template Name: شاپ مارشو - قالب فروشگاهی ریسپانسیو HTML
+Version: 1.0.0
+Author: Kamleshyadav
+Website:
+Purchase:
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- Begin Head -->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'home/css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'home/css/nice-select.css' %}" >
+    <link rel="stylesheet" href="{% static 'home/css/font.css' %}" >
+    <link rel="stylesheet" href="{% static 'home/css/swiper-bundle.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'home/css/comman.css' %}" >
+    <link rel="stylesheet" href="{% static 'home/css/style.css' %}" >
+    <!-- Favicon Link -->
+    <link rel="shortcut icon" type="image/png" href="assets/images/index1/favicon.png">
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+<body>
+
+        {% block content %}
+        {% endblock %}
+
+        <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+        <script src="{% static 'home/js/jquery.min.js' %}"></script>
+        <script src="{% static 'home/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'home/js/SmoothScroll.min.js' %}"></script>
+        <script src="{% static 'home/js/jquery.nice-select.min.js' %}"></script>
+        <script src="{% static 'home/js/swiper-bundle.min.js' %}"></script>
+        <script src="{% static 'home/js/isotope.pkgd.min.js' %}"></script>
+        <script src="{% static 'home/js/custom.js' %}"></script>
+</body>
+</html>

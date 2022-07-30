@@ -5,20 +5,24 @@ from account.manager import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    MALE = "M"
+    FEMALE = "F"
+    UNSURE = "U"
     SEX_CHOICE = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('U', 'Unsure')
+        (MALE, 'Male'),
+        (FEMALE, 'Female'),
+        (UNSURE, 'Unsure')
     )
-    name = models.CharField(max_length=32, blank=True, null=True)
-    last_name = models.CharField(max_length=200, blank=True, null=True)
+    first_name = models.CharField(max_length=32, blank=True, null=True)
+    last_name = models.CharField(max_length=32, blank=True, null=True)
     email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=40, unique=True)
+    phone = models.CharField(max_length=15, unique=True)
     username = models.CharField(unique=True, max_length=32)
-    data_join = models.DateTimeField(auto_now_add=True)
+    create_time = models.DateTimeField(auto_now_add=True)
+    modified_time = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
-    age = models.IntegerField(blank=True, null=True)
-    sex = models.CharField(max_length=1, choices=SEX_CHOICE, blank=True, null=True)
+    age = models.PositiveIntegerField(blank=True, null=True)
+    sex = models.CharField(max_length=10, choices=SEX_CHOICE, default=UNSURE)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
 
