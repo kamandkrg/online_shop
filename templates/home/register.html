@@ -17,29 +17,68 @@
                             </div>
 
                             <div class="autho-model-filed">
-                                <form method="POST" action="">
+                                <form method="POST" action="{% url 'register' %}">
+                                    {% csrf_token %}
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="e-form-field mb-20">
-                                                <label>نام </label>
-                                                <input class="e-field-inner" type="text">
+                                                <label>username</label>
+                                                {{ form.username }}
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="e-form-field mb-20">
-                                                <label>ایمیل </label>
-                                                <input class="e-field-inner" type="email">
+                                                <label>first name</label>
+                                                {{ form.first_name }}
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="e-form-field mb-20">
-                                                <label>رمز عبور </label>
-                                                <input class="e-field-inner" type="Password">
+                                                <label>last name</label>
+                                                {{ form.last_name }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="e-form-field mb-20">
+                                                <label>email</label>
+                                                {{ form.email }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="e-form-field mb-20">
+                                                <label>phone</label>
+                                                {{ form.phone }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="e-form-field mb-20">
+                                                <label>gender</label>
+                                                {{ form.sex }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="e-form-field mb-20">
+                                                <label>age</label>
+                                                {{ form.age }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="e-form-field mb-20">
+                                                <label>password</label>
+                                                {{ form.password1 }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="e-form-field mb-20">
+                                                <label>password confirmation</label>
+                                                {{ form.password2 }}
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="">
-                                                <a href="index.html" class="e-btn">ثبت نام </a>
+                                                <button type="submit">
+                                                    ثبت نام
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

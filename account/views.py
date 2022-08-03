@@ -14,6 +14,11 @@ def sing_up(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect('home-page')
+        return redirect('register')
+    else:
+        form = UserCreationForm()
+        return render(request, 'home/register.html', context={'form': form})
 
 
 @login_required
