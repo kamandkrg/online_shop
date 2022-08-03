@@ -12,6 +12,11 @@
                 <div class="ht-right_info">
                     <ul class="ht-info-list">
                         <li><a href="{% url 'login' %}">حساب کاربری </a></li>
+                        {% if request.user.is_authenticated %}
+                        <li>
+                            <p> {{ request.user.username }} </p>
+                        </li>
+                        {% endif %}
                         <li>
                             {% if request.user.is_authenticated %}
                             <a href="{% url 'logout' %}"> خروج </a>
