@@ -1,13 +1,11 @@
 from django.shortcuts import render
 
-
-def product_list(request):
-    return render(request, 'home/register.html')
+from product.models import Product
 
 
 def product_detail(request, product_slug):
-    pass
-
+    product = Product.objects.get(slug=product_slug)
+    return render(request, 'products/product_details.html', {'product': product})
 
 
 
