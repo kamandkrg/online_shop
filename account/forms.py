@@ -4,12 +4,10 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from account.models import User
 
 
-class RegistrationForm(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
-
-    class Meta:
-        model = User
-        fields = ('email', 'phone', 'username', 'password')
+class RegistrationForm(forms.Form):
+    password = forms.CharField(label='Password', widget=forms.PasswordInput(
+        attrs={'class': 'e-field-inner', 'placeholder': 'password'}))
+    username = forms.CharField(label='username', widget=forms.TextInput(attrs={'class': 'e-field-inner'}))
 
     def save(self, commit=True):
         # Save the provided password in hashed format
