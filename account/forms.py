@@ -27,6 +27,18 @@ class UserCreationForm(forms.ModelForm):
         fields = ('email', 'username', 'phone', 'first_name', 'last_name', 'is_staff', 'is_superuser', 'is_active',
                   'sex', 'age')
 
+    def __init__(self, *args, **kwargs):
+        super(UserCreationForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'e-field-inner'})
+        self.fields['email'].widget.attrs.update({'class': 'e-field-inner'})
+        self.fields['phone'].widget.attrs.update({'class': 'e-field-inner'})
+        self.fields['first_name'].widget.attrs.update({'class': 'e-field-inner'})
+        self.fields['last_name'].widget.attrs.update({'class': 'e-field-inner'})
+        self.fields['age'].widget.attrs.update({'class': 'e-field-inner'})
+        self.fields['sex'].widget.attrs.update({'class': 'e-field-inner'})
+        self.fields['password1'].widget.attrs.update({'class': 'e-field-inner'})
+        self.fields['password2'].widget.attrs.update({'class': 'e-field-inner'})
+
     def clean_password2(self):
         # Check that the two password entries match
         password1 = self.cleaned_data.get("password1")
