@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'category.apps.CategoryConfig',
     'home.apps.HomeConfig',
     'account.apps.AccountConfig'
+    'basket.apps.BasketConfig'
 ]
 AUTH_USER_MODEL = 'account.User'
 

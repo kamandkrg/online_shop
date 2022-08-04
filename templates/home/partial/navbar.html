@@ -16,7 +16,7 @@
                         <li>
                             <p> {{ request.user.username }} </p>
                         </li>
-                        {% endif %}
+                        {%  %}
                         <li>
                             {% if request.user.is_authenticated %}
                             <a href="{% url 'logout' %}"> خروج </a>
