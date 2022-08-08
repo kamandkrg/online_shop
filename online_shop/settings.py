@@ -42,8 +42,9 @@ INSTALLED_APPS = [
     'product.apps.ProductConfig',
     'category.apps.CategoryConfig',
     'home.apps.HomeConfig',
-    'account.apps.AccountConfig'
-    'basket.apps.BasketConfig'
+    'account.apps.AccountConfig',
+    'basket.apps.BasketConfig',
+    'finance.apps.FinanceConfig'
 ]
 AUTH_USER_MODEL = 'account.User'
 
@@ -147,3 +148,7 @@ LOGIN_URL = 'account/login/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+

@@ -4,20 +4,20 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 
-from account.forms import RegistrationForm, UserCreationForm
+from account.forms import UserLoginForm, UserRegisterForm
 from account.models import User
 
 
 @require_http_methods(request_method_list=["POST", "GET"])
 def sing_up(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('home-page')
         return redirect('register')
     else:
-        form = UserCreationForm()
+        form = UserRegisterForm()
         return render(request, 'home/register.html', context={'form': form})
 
 
@@ -30,7 +30,7 @@ def logout_user(request):
 @require_http_methods(request_method_list=['POST', 'GET'])
 def login_user(request):
     if request.method == "POST":
-        form = RegistrationForm(request.POST)
+        form = UserLoginForm(request.POST)
         if form.is_valid():
             username = request.POST.get('username')
             password = request.POST.get('password')
@@ -40,5 +40,5 @@ def login_user(request):
                 return redirect('home-page')
         return redirect('login')
     else:
-        form = RegistrationForm()
+        form = UserLoginForm()
         return render(request, 'home/login.html', {'form': form})

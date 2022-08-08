@@ -21,7 +21,7 @@ class AccountAdmin(UserAdmin):
         ('Permissions', {'fields': ('user_permissions',)}),
     )
     add_fieldsets = (
-        (None, {'fields': ('username', 'is_staff', 'is_superuser', 'is_active' 'password1', 'password2')}),
+        (None, {'fields': ('username', 'is_staff', 'is_superuser', 'is_active', 'password1', 'password2')}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'phone', 'age', 'sex', 'email')}),
         ('Groups', {'fields': ('groups',)}),
         ('Permissions', {'fields': ('user_permissions',)}),
