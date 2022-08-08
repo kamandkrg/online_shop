@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+from finance.models import Payment
 from product.models import Product
 
 
@@ -28,7 +29,7 @@ class BasketCheckout(models.Model):
     status = models.SmallIntegerField(choices=STATUS_CHOICE, default=NOT_PAID)
     basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='basket_checkout')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='basket_checkout')
-
+    payment = models.ForeignKey(Payment, on_delete=models.PROTECT, related_name='basket_checkout')
 
 
 
