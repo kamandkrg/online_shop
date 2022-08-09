@@ -1,8 +1,10 @@
-from django.db import models
+from django.db import models, transaction
 from django.conf import settings
+from django.db.models import Sum
 
 from finance.models import Payment
 from product.models import Product
+from shipping.models import ShippingAddress
 
 
 class Basket(models.Model):
@@ -30,6 +32,23 @@ class BasketCheckout(models.Model):
     basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='basket_checkout')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='basket_checkout')
     payment = models.ForeignKey(Payment, on_delete=models.PROTECT, related_name='basket_checkout')
+    address = models.ForeignKey(ShippingAddress, on_delete=models.SET_NULL, related_name='basket_checkout', null=True)
+    total_price = models.BigIntegerField()
+
+    @staticmethod
+    def create_payment(basket, user):
+        payment = Payment.object.create(user=user, amount=basket.total_price)
+        return payment
+
+    @classmethod
+    def create(cls, basket, user, address):
+        baskets = Basket.objects.prefetch_related('lines').filter(
+            pk=basket.pk).aggregate(total_price=Sum('lines__price')).first()
+        with transaction.atomic():
+            payment = cls.create_payment(baskets, user)
+            basket_checkout = cls.object.create(basket=basket, user=user, payment=payment, address=address,
+                                                total_price=baskets.total_price)
+        return basket_checkout
 
 
 
