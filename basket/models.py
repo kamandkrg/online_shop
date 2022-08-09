@@ -13,6 +13,38 @@ class Basket(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
     modify_time = models.DateTimeField(auto_now=True)
 
+    def add(self, product, quantity):
+
+        if self.lines.filter(product=product).exists():
+            line = self.lines.filter(product=product).first()
+            line.quantity += quantity
+            line.save()
+        else:
+            line = self.lines.create(product=product, quantity=quantity)
+        return line
+
+    @classmethod
+    def get_basket(cls, basket_id):
+        if basket_id is None:
+            basket = cls.objects.create()
+        else:
+            try:
+                basket = cls.objects.get(pk=basket_id)
+            except cls.DoseNotExist:
+                basket = None
+        return basket
+
+    def check_authenticate(self, user):
+        if user.is_authenticated:
+            if self.user is not None and user != self.user:
+                return False
+            if self.user is None:
+                self.user = user
+                self.save()
+        elif self.user is not None:
+            return False
+        return True
+
 
 class BasketLine(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='lines')
