@@ -75,18 +75,17 @@ class BasketCheckout(models.Model):
     total_price = models.BigIntegerField()
 
     @staticmethod
-    def create_payment(basket, user):
-        payment = Payment.object.create(user=user, amount=basket.total_price)
+    def create_payment(total_price, user):
+        payment = Payment.objects.create(user=user, amount=total_price)
         return payment
 
     @classmethod
     def create(cls, basket, user, address):
-        baskets = Basket.objects.prefetch_related('lines').filter(
-            pk=basket.pk).aggregate(total_price=Sum('lines__price')).first()
+        _, total = BasketLine.show_lines(basket)
         with transaction.atomic():
-            payment = cls.create_payment(baskets, user)
-            basket_checkout = cls.object.create(basket=basket, user=user, payment=payment, address=address,
-                                                total_price=baskets.total_price)
+            payment = cls.create_payment(total, user)
+            basket_checkout = cls.objects.create(basket=basket, user=user, payment=payment, address=address,
+                                                 total_price=total)
         return basket_checkout
 
 
