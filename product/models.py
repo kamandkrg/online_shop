@@ -11,6 +11,7 @@ class Product(models.Model):
     is_active = models.BooleanField(default=True)
     description = models.TextField(blank=True, null=True)
     price = models.FloatField(default=0)
+    sale_number = models.PositiveIntegerField(default=0)
     slug = models.SlugField(max_length=255, unique=True)
     modified_time = models.DateTimeField(auto_now=True)
 
