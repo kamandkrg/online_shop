@@ -86,22 +86,25 @@
                                 </div>
                             </li>
                             <li>
-                                <div class="ib-list-left">
+                                <form method="POST" action="{% url 'add-to-basket' %}">
+                                    <div class="ib-list-left">
                                     <span>تعداد </span>
                                 </div>
-                                <div class="ib-list-right">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="next" value="{{request.build_absolute_uri}}">
+                                    <div class="ib-list-right">
                                     <ul class="pd-qua-wrap">
                                         <li>
                                             <div class="quantity-box">
-                                                <input type="text" class="quantity" value="1">
-                                                <span class="quantity-minus pa-sub quantity-icon"> - </span>                                                
+                                                {{form.quantity}}
+                                                <span class="quantity-minus pa-sub quantity-icon"> - </span>
                                                 <span class="quantity-plus  pa-add quantity-icon"> + </span>
                                                 <div class="clearfix"></div>
-                                                
+                                                {{form.product}}
                                             </div>
                                         </li>
                                         <li>
-                                            <a href="cart.html" class="e-btn pd-addcart">افزودن به سبد </a>
+                                            <button type="submit" class="e-btn pd-addcart">افزودن به سبد </button>
                                         </li>
                                         <li>
                                             <a href="wishlist.html" class="e-btn light pd-heart">
@@ -116,6 +119,7 @@
                                         </li>
                                     </ul>
                                 </div>
+                                </form>
                             </li>
                         </ul>
                         

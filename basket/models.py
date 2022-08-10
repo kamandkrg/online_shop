@@ -55,7 +55,8 @@ class BasketLine(models.Model):
     def show_lines(cls, basket):
         related = cls.objects.prefetch_related('product').filter(basket=basket)
         lines = related.annotate(total=F('quantity') * F('product__price'))
-        return lines
+        total_all = lines.all().aggregate(Sum('total'))
+        return lines, total_all.get('total__sum')
 
 
 class BasketCheckout(models.Model):
