@@ -69,7 +69,7 @@ class Payment(models.Model):
     def get_handler_data(self):
         return dict(merchant_id=self.gateway.auth_data, amount=self.amount, description="",
                     email=self.user.email, mobile=getattr(self.user, 'phone_number', None),
-                    callback='http://127.0.0.1:8000/finance/verify')
+                    callback='http://127.0.0.1:8000/basket/verify')
 
     @property
     def bank_page(self):
@@ -83,7 +83,7 @@ class Payment(models.Model):
             return link
 
     def verify(self, data):
-        handler = self.gateway.get_verify_request()
+        handler = self.gateway.get_verify_handler()
         if not self.is_paid and handler is not None:
             self.is_paid, _ = handler(**data)
             self.save()

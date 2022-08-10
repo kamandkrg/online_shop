@@ -2,11 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, F
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
+from django.views import View
 from django.views.decorators.http import require_http_methods, require_POST, require_GET
 
 from basket.forms import AddToBasketForm
 from basket.models import Basket, BasketLine, BasketCheckout
-from finance.models import Gateway
+from finance.models import Gateway, Payment
 from shipping.forms import ShippingAddressForm
 
 
@@ -70,4 +71,35 @@ def basket_checkout(request):
         lines, total_all = BasketLine.show_lines(basket)
         return render(request, 'basket/shipping_cart.html', context={'form': form, 'gateway': gateway,
                                                                      'total_all': total_all})
+
+
+class VerifyView(View):
+    template_name = "basket/cart.html"
+
+    def get(self, request, *args, **kwargs):
+        authority = request.GET.get('Authority')
+        try:
+            payment = Payment.objects.get(authority=authority)
+        except Payment.DoseNotExsit:
+            return Http404
+
+        data = dict(merchant_id=payment.gateway.auth_data, amount=payment.amount, authority=authority)
+
+        payment.verify(data)
+
+        return render(request, self.template_name)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -13,6 +13,12 @@ class Basket(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
     modify_time = models.DateTimeField(auto_now=True)
 
+    def sale_product(self):
+        lines = BasketLine.objects.prefetch_related('product').filter(basket=self)
+        for line in lines:
+            line.product.sale_number += line.quantity
+            line.product.save()
+
     def add(self, product, quantity):
 
         if self.lines.filter(product=product).exists():
