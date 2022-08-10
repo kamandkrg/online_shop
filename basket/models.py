@@ -1,6 +1,6 @@
 from django.db import models, transaction
 from django.conf import settings
-from django.db.models import Sum
+from django.db.models import Sum, F
 
 from finance.models import Payment
 from product.models import Product
@@ -50,6 +50,12 @@ class BasketLine(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='lines')
     basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='lines')
     quantity = models.PositiveSmallIntegerField()
+
+    @classmethod
+    def show_lines(cls, basket):
+        related = cls.objects.prefetch_related('product').filter(basket=basket)
+        lines = related.annotate(total=F('quantity') * F('product__price'))
+        return lines
 
 
 class BasketCheckout(models.Model):

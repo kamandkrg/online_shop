@@ -1,10 +1,13 @@
+from django.db.models import Sum, F
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
+from django.views.decorators.http import require_http_methods, require_POST, require_GET
 
 from basket.forms import AddToBasketForm
-from basket.models import Basket
+from basket.models import Basket, BasketLine
 
 
+@require_POST
 def add_to_basket(request):
     response = HttpResponseRedirect(request.POST.get('next', '/'))
     basket_id = request.COOKIES.get('basket_id', None)
@@ -24,5 +27,13 @@ def add_to_basket(request):
     return response
 
 
+@require_http_methods(request_method_list=["GET"])
 def show_basket(request):
+    basket_id = request.COOKIES.get('basket_id', None)
+    basket = Basket.get_basket(basket_id)
+    lines = BasketLine.show_lines(basket)
+    return render(request, 'basket/cart.html', context={'lines': lines})
+
+
+def delete_item(request, pk):
     pass
