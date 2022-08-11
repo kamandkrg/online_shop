@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import register
 
-from product.models import ProductImage, Product
+from product.models import ProductImage, Product, ProductView
 
 
 class ProductImageAdmin(admin.TabularInline):
@@ -16,3 +16,6 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImageAdmin]
 
 
+@register(ProductView)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ['product', 'ip']

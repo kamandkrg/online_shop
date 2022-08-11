@@ -25,3 +25,19 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return str(self.product)
+
+
+class ProductView(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='visits')
+    ip = models.GenericIPAddressField()
+
+    @classmethod
+    def increase_visit(cls, product, ip):
+        product_exist = cls.objects.filter(product=product)
+        if product_exist.exists():
+            ip_address = product_exist.filter(ip=ip)
+            if ip_address.exists():
+                return
+        cls.objects.create(product=product, ip=ip)
+
+
