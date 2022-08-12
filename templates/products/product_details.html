@@ -175,6 +175,7 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="review" role="tabpanel" >
+                            {% if request.user.is_authenticated %}
                             <div class="tab-content-inner">
                                 {% for comment in comments %}
                                 <div class="border my-4 py-2 rounded">
@@ -215,6 +216,11 @@
                                     </div>
                                   </form>
                             </div>
+                            {% else %}
+                            <a href="{% url 'login' %}" >
+                            <h1> برای دیدن و ثبت نظر ابتدا باید وارد حساب کاربری خود شوید </h1>
+                            </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

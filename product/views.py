@@ -30,7 +30,7 @@ def product_detail(request, product_slug):
                 ipaddress = request.META.get('REMOTE_ADDR')
             product = product.first()
             ProductView.increase_visit(product, ipaddress)
-            comments = Comment.objects.filter(reply=None)
+            comments = Comment.objects.filter(reply=None, product=product)
             form_comment = CommentForm({'product': product})
             form = AddToBasketForm({'product': product, 'quantity': 1})
             context = {'product': product, "form": form, 'form_comment': form_comment, 'comments': comments}
