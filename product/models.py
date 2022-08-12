@@ -1,4 +1,7 @@
+from django.conf import settings
 from django.db import models
+from django.db.models import Avg
+
 from category.models import Category
 
 
@@ -39,5 +42,16 @@ class ProductView(models.Model):
             if ip_address.exists():
                 return
         cls.objects.create(product=product, ip=ip)
+
+
+class ProductRate(models.Model):
+    rate = models.PositiveSmallIntegerField()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='rates')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='rates')
+
+    @classmethod
+    def avg(cls, product):
+        avg = cls.objects.filter(product=product).aggregate(avg_rate=Avg('rate'))
+        return avg.get('avg_rate')
 
 

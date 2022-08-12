@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from basket.forms import AddToBasketForm
 from comment.forms import CommentForm
 from comment.models import Comment
-from product.models import Product, ProductView
+from product.forms import ProductRateForm
+from product.models import Product, ProductView, ProductRate
 
 
 def product_detail(request, product_slug):
@@ -33,10 +34,20 @@ def product_detail(request, product_slug):
             comments = Comment.objects.filter(reply=None, product=product)
             form_comment = CommentForm({'product': product})
             form = AddToBasketForm({'product': product, 'quantity': 1})
-            context = {'product': product, "form": form, 'form_comment': form_comment, 'comments': comments}
+            form_rate = ProductRateForm({'product': product, 'rate': 1})
+            rate = ProductRate.avg(product)
+            context = {'product': product, "form": form, 'form_comment': form_comment, 'comments': comments,
+                       'rate': rate, 'form_rate': form_rate}
             return render(request, 'products/product_details.html', context=context)
 
 
+def rate_view(request, product_slug):
+    form = ProductRateForm(request.POST)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.user = request.user
+        form.save()
+    return redirect('product-detail', product_slug)
 
 
 

@@ -21,7 +21,8 @@
                         </div>  
                     </div>                           
                 </div>            
-            </div>            
+            </div>
+
             <div class="col-lg-6 col-md-12">
                 <div class="prodetails-info">
                     <div class="pd-infotop">
@@ -61,28 +62,29 @@
                             </li>
                             <li>
                                 <div class="ib-list-left">
-                                    <span>سایز های موجود</span>
+                                    <span>امتیاز از ۵ </span>
                                 </div>
                                 <div class="ib-list-right">
-                                    <ul class="pd-info-size d-flex">
-                                        <li>S</li>
-                                        <li>M</li>
-                                        <li>L</li>
-                                        <li>XL</li>
-                                    </ul>
+                                    <div class="pd-info-pincode">
+                                        {{ rate }}
+                                    </div>
                                 </div>
                             </li>
                             <li>
                                 <div class="ib-list-left">
-                                    <span>ارائه به </span>
+                                    امتیاز دهی
                                 </div>
                                 <div class="ib-list-right">
-                                    <div class="pd-info-pincode">
-                                        <div class="e-nl-box boreder  pd-info-pinbox">
-                                            <input type="text" placeholder="کد رمز خود را وارد کنید...">
-                                            <a href="javascript:void(0);" class="e-btn newsletter-btn">بررسی </a>
-                                        </div>
-                                    </div>
+                                    {% if request.user.is_authenticated %}
+                                    <form action="{% url 'create-rate' product.slug %}" method="post">
+                                        {% csrf_token %}
+                                        {{ form_rate.rate }}
+                                        {{ form_rate.product.as_hidden }}
+                                        <button type="submit"> ثبت </button>
+                                    </form>
+                                    {% else %}
+                                    <p>برای ثبت نظر باید وارد حساب کاربری خود شوید</p>
+                                    {% endif %}
                                 </div>
                             </li>
                             <li>
