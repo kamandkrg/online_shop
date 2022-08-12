@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'basket.apps.BasketConfig',
     'finance.apps.FinanceConfig',
     'shipping.apps.ShippingConfig',
+    'comment.apps.CommentConfig'
 ]
 AUTH_USER_MODEL = 'account.User'
 

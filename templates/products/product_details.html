@@ -176,28 +176,40 @@
                         </div>
                         <div class="tab-pane fade" id="review" role="tabpanel" >
                             <div class="tab-content-inner">
-                                <h2 class="pdtab-rev-title">هنوز هیچ نظری وجود ندارد.</h2>
-                                <h2 class="pdtab-rev-stitle">اولین نفری باشید که این محصول را مورد بازنگری قرار میدهد"</h2>
-                                <form>
+                                {% for comment in comments %}
+                                <div class="border my-4 py-2 rounded">
+                                    <p class="pdtab-rev-title"> {{ comment.user.username }} </p>
+                                <h2 class="pdtab-rev-title">{{ comment.text }}</h2>
+                                <button href="#Bar{{ comment.pk }}" class="btn btn-default text-primary" data-toggle="collapse">reply</button>
+                                <div id="Bar{{ comment.pk }}" class="collapse in">
+                                    <form action="{% url 'product-detail' product.slug %}" method="post">
+                                        {% csrf_token %}
+                                        {{ form_comment.text }}
+                                        {{ form_comment.product.as_hidden }}
+                                        <input type="hidden" name="comment_id" value="{{ comment.pk }}">
+                                        <button type="submit">send</button>
+                                    </form>
+                                </div>
+                                </div>
+                                    {% for reply in comment.children.all %}
+                                    <div class="border my-4 mx-5 py-2 rounded">
+                                        <p class="pdtab-rev-title"> {{ comment.user.username }} </p>
+                                        <h2 class="pdtab-rev-stitle ml-5">{{ reply.text }}</h2>
+                                    </div>
+                                    {% endfor %}
+                                {% endfor %}
+                                <form action="{% url 'product-detail' product.slug %}" method="post">
                                     <div class="row">
-                                      <div class="col-md-6">
-                                        <div class="e-form-field mb-30">
-                                          <input class="e-field-inner" type="text" placeholder="نام شما">
-                                        </div>
-                                      </div>
-                                      <div class="col-md-6">
-                                        <div class="e-form-field mb-30">
-                                          <input class="e-field-inner" type="email" placeholder="ایمیل">
-                                        </div>
-                                      </div>
                                       <div class="col-12">
                                         <div class="e-form-field mb-30">
-                                          <textarea class="e-field-inner" ></textarea>
+                                            {% csrf_token %}
+                                            {{ form_comment.text }}
+                                            {{ form_comment.product.as_hidden }}
                                         </div>
                                       </div>
                                       <div class="col-12">
                                         <div class="e-form-field">
-                                        <button type="button" class="e-btn">ارسال</button>
+                                        <button type="submit" class="e-btn">ارسال</button>
                                         </div>
                                       </div>
                                     </div>
