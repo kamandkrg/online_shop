@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import render, redirect
 
 from basket.forms import AddToBasketForm
@@ -31,13 +32,15 @@ def product_detail(request, product_slug):
                 ipaddress = request.META.get('REMOTE_ADDR')
             product = product.first()
             ProductView.increase_visit(product, ipaddress)
+            product_view1 = ProductView.objects.filter(product=product).aggregate(view_product=Count('ip'))
+            product_view2 = product_view1.get('view_product')
             comments = Comment.objects.filter(reply=None, product=product)
             form_comment = CommentForm({'product': product})
             form = AddToBasketForm({'product': product, 'quantity': 1})
             form_rate = ProductRateForm({'product': product, 'rate': 1})
             rate = ProductRate.avg(product)
             context = {'product': product, "form": form, 'form_comment': form_comment, 'comments': comments,
-                       'rate': rate, 'form_rate': form_rate}
+                       'rate': rate, 'form_rate': form_rate, 'view': product_view2}
             return render(request, 'products/product_details.html', context=context)
 
 

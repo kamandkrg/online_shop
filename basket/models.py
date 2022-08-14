@@ -31,12 +31,12 @@ class Basket(models.Model):
 
     @classmethod
     def get_basket(cls, basket_id):
-        if basket_id is None:
+        if basket_id is None or 'None':
             basket = cls.objects.create()
         else:
             try:
                 basket = cls.objects.get(pk=basket_id)
-            except cls.DoseNotExist:
+            except cls.DoesNotExist:
                 basket = None
         return basket
 

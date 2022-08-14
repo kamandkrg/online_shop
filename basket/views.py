@@ -77,6 +77,7 @@ class VerifyView(View):
     template_name = "basket/cart.html"
 
     def get(self, request, *args, **kwargs):
+        response = render(request, self.template_name)
         authority = request.GET.get('Authority')
         try:
             payment = Payment.objects.get(authority=authority)
@@ -85,9 +86,10 @@ class VerifyView(View):
 
         data = dict(merchant_id=payment.gateway.auth_data, amount=payment.amount, authority=authority)
 
-        payment.verify(data)
-
-        return render(request, self.template_name)
+        paid = payment.verify(data)
+        if paid:
+            response.set_cookie('basket_id', None)
+        return response
 
 
 
