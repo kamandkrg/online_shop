@@ -2,10 +2,11 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_GET
 
 from account.forms import UserLoginForm, UserRegisterForm
 from account.models import User
+from basket.models import BasketCheckout
 
 
 @require_http_methods(request_method_list=["POST", "GET"])
@@ -42,3 +43,21 @@ def login_user(request):
     else:
         form = UserLoginForm()
         return render(request, 'home/login.html', {'form': form})
+
+
+@login_required
+@require_GET
+def profile(request):
+    basket = BasketCheckout.objects.filter(user=request.user).prefetch_related('basket')
+    return render(request, 'profile/profile.html', {'basket': basket})
+
+
+
+
+
+
+
+
+
+
+

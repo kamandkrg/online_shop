@@ -14,7 +14,7 @@
                         <li><a href="{% url 'login' %}">حساب کاربری </a></li>
                         {% if request.user.is_authenticated %}
                         <li>
-                            <p> {{ request.user.username }} </p>
+                            <a href="{% url 'profile' %}" > <p> {{ request.user.username }} </p> </a>
                         </li>
                         {% endif %}
                         <li>
