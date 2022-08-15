@@ -31,7 +31,7 @@ class Basket(models.Model):
 
     @classmethod
     def get_basket(cls, basket_id):
-        if basket_id is None or 'None':
+        if basket_id is None or basket_id == 'None':
             basket = cls.objects.create()
         else:
             try:

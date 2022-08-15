@@ -52,6 +52,6 @@ class ProductRate(models.Model):
     @classmethod
     def avg(cls, product):
         avg = cls.objects.filter(product=product).aggregate(avg_rate=Avg('rate'))
-        return avg.get('avg_rate')
+        return round(avg.get('avg_rate'), 1)
 
 
