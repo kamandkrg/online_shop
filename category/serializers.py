@@ -25,3 +25,14 @@ class CategorySerializer(serializers.ModelSerializer):
             validated_data['parent'] = None
         cr = super().create(validated_data)
         return cr
+
+    def update(self, instance, validated_data):
+        if validated_data['parent']:
+            parent = get_object_or_404(Category, slug=validated_data['parent'])
+            validated_data['parent'] = parent
+        else:
+            validated_data['parent'] = None
+        cr = super().update(instance, validated_data)
+        return cr
+
+
