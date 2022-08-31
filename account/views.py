@@ -4,13 +4,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods, require_GET
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, get_object_or_404, UpdateAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from account.models import User
 from account.serializers import CreateUserSerializers, UpdateUserSerializer, UpdateDestroyRetrieveUserSerializer
-from lib.permissions import HaveUpdatePermission, NotAuthenticatePermission
+from lib.permissions import HaveUpdatePermission, NotAuthenticatePermission, NoOne
 
 from account.forms import UserLoginForm, UserRegisterForm
 from account.models import User
@@ -20,7 +20,19 @@ from basket.models import BasketCheckout
 class SingUpAPIView(ListCreateAPIView):
     serializer_class = CreateUserSerializers
     queryset = User.objects.all()
-    permission_classes = (NotAuthenticatePermission, )
+    permission_classes = (AllowAny, )
+
+    def get_permissions(self):
+        if self.request.user.is_authenticated and self.request.user.is_staff:
+            return super(SingUpAPIView, self).get_permissions()
+        if (not self.request.user.is_authenticated) and self.request.method != 'GET':
+            permission_classes = (NotAuthenticatePermission, )
+            return [permission() for permission in permission_classes]
+        elif (not self.request.user.is_authenticated) and self.request.method == 'POST':
+            return super(SingUpAPIView, self).get_permissions()
+        else:
+            permission_classes = (NoOne,)
+            return [permission() for permission in permission_classes]
 
 
 class UpdatePasswordUserAPIView(UpdateAPIView):
@@ -66,9 +78,10 @@ class UpdateUserAPIView(RetrieveUpdateDestroyAPIView):
 
 
 class BlacklistRefreshView(APIView):
+    permission_classes = (IsAuthenticated, )
+
     def post(self, request):
         token = RefreshToken(request.data.get('refresh'))
-        print(token)
         token.blacklist()
         return Response(f"Success")
 

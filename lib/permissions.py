@@ -4,6 +4,11 @@ from rest_framework.permissions import BasePermission
 User = get_user_model()
 
 
+class NoOne(BasePermission):
+    def has_permission(self, request, view):
+        return False
+
+
 class SuperUserPermission(BasePermission):
     message = 'Adding customers not allowed.'
 
@@ -27,6 +32,6 @@ class NotAuthenticatePermission(BasePermission):
     message = 'you are login'
 
     def has_permission(self, request, view):
-        if request.user.is_anonymousor or request.user.is_superuser or request.user.is_staff:
+        if (not request.user.is_authenticated) or (request.user.is_superuser or request.user.is_staff):
             return True
         return False
