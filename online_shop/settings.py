@@ -41,12 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'product.apps.ProductConfig',
     'category.apps.CategoryConfig',
-    'home.apps.HomeConfig',
     'account.apps.AccountConfig',
     'basket.apps.BasketConfig',
     'finance.apps.FinanceConfig',
     'shipping.apps.ShippingConfig',
-    'comment.apps.CommentConfig'
+    'comment.apps.CommentConfig',
+    'rest_framework_simplejwt.token_blacklist',
+    'rest_framework'
 ]
 AUTH_USER_MODEL = 'account.User'
 
@@ -164,3 +165,16 @@ ZARRINPAL = {
     'merchant_id': ZARRINPAL_MERCHANT_ID
 }
 
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+    ) if DEBUG else (
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+    )
+}
