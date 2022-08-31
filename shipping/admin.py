@@ -1,3 +1,10 @@
 from django.contrib import admin
+from django.contrib.admin import register
 
-# Register your models here.
+from shipping.models import ShippingAddress
+
+
+@register(ShippingAddress)
+class ShippingAddressAdmin(admin.ModelAdmin):
+    list_display = ('user', 'zipcode', 'city', 'address', 'number')
+
