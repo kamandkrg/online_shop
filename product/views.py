@@ -5,7 +5,95 @@ from basket.forms import AddToBasketForm
 from comment.forms import CommentForm
 from comment.models import Comment
 from product.forms import ProductRateForm
-from product.models import Product, ProductView, ProductRate
+from django.db.models import Q
+from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView, get_object_or_404
+from rest_framework.permissions import AllowAny, IsAdminUser
+from product.models import Product, ProductView, ProductRate, ProductImage
+from product.serializers import CreateListProductSerializer, CreateImageSerializer
+
+
+class ProductCreateListAPIView(ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = CreateListProductSerializer
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            permission_classes = (AllowAny,)
+        else:
+            permission_classes = (IsAdminUser, )
+        return [permission() for permission in permission_classes]
+
+
+class ProductUpdateDestroyAPIView(RetrieveDestroyAPIView):
+    serializer_class = CreateListProductSerializer
+    queryset = Product.objects.all()
+    permission_classes = [AllowAny]
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            permission_classes = (AllowAny,)
+        else:
+            permission_classes = (IsAdminUser, )
+        return [permission() for permission in permission_classes]
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return CreateImageSerializer
+        return CreateListProductSerializer
+
+
+class ProductCategoryList(ListCreateAPIView):
+    serializer_class = CreateListProductSerializer
+    queryset = Product.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            permission_classes = (AllowAny,)
+        else:
+            permission_classes = (IsAdminUser, )
+        return [permission() for permission in permission_classes]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        slug_category = self.kwargs['slug_category']
+        return qs.filter(Q(category__slug=slug_category) | Q(category__parent__slug=slug_category))
+
+
+class ImageListCreateAPIView(ListCreateAPIView):
+    queryset = ProductImage.objects.all()
+    serializer_class = CreateImageSerializer
+    permission_classes = (AllowAny, )
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            permission_classes = (AllowAny,)
+        else:
+            permission_classes = (IsAdminUser, )
+        return [permission() for permission in permission_classes]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(product__id=self.kwargs['pk'])
+
+    def perform_create(self, serializer):
+        product = get_object_or_404(Product, pk=self.kwargs['pk'])
+        serializer.save(product=product)
+
+
+class ImageRetrieveDestroy(RetrieveDestroyAPIView):
+    queryset = ProductImage.objects.all()
+    serializer_class = CreateImageSerializer
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            permission_classes = (AllowAny,)
+        else:
+            permission_classes = (IsAdminUser, )
+        return [permission() for permission in permission_classes]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(product__id=self.kwargs['pk_product'])
 
 
 def product_detail(request, product_slug):
