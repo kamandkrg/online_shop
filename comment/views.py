@@ -1,8 +1,6 @@
-from django.shortcuts import render
-from django.views.decorators.http import require_POST
 
-from rest_framework.generics import ListCreateAPIView, UpdateAPIView, get_object_or_404, RetrieveUpdateAPIView
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.generics import ListCreateAPIView, get_object_or_404, RetrieveUpdateAPIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from comment.models import Comment
 from comment.serializers import CommentListSerializer
