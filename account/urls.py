@@ -1,6 +1,7 @@
 from django.urls import path
 
-from account.views import sing_up, login_user, logout_user, profile
+from account.views import sing_up, login_user, logout_user, profile, UpdatePasswordUserAPIView, UpdateUserAPIView, \
+    SingUpAPIView, BlacklistRefreshView
 
 urlpatterns = [
     path('login/', login_user, name="login"),
