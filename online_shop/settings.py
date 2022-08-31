@@ -165,8 +165,6 @@ ZARRINPAL = {
     'merchant_id': ZARRINPAL_MERCHANT_ID
 }
 
-
-
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
