@@ -10,8 +10,8 @@ urlpatterns = [
     path('profile/', profile, name="profile"),
     path('api/change-password/', UpdatePasswordUserAPIView.as_view(), name="change-password"),
     path('api/change-password/<int:pk>/', UpdatePasswordUserAPIView.as_view(), name="change-password-admin"),
-    path('api/update/', UpdateUserAPIView.as_view(), name="edit"),
-    path('api/update/<int:pk>/', UpdateUserAPIView.as_view(), name="edit-admin"),
+    path('api/update-detail/', UpdateUserAPIView.as_view(), name="edit"),
+    path('api/update-detail/<int:pk>/', UpdateUserAPIView.as_view(), name="edit-admin"),
     path('api/register/', SingUpAPIView.as_view(), name="register"),
     path('api/logout/', BlacklistRefreshView.as_view(), name="logout"),
 ]

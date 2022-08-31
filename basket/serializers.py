@@ -6,7 +6,7 @@ from basket.models import Basket, BasketLine, BasketCheckout
 from finance.models import Gateway
 from product.models import Product
 from shipping.models import ShippingAddress
-from shipping.seializers import ShippingAddressSerializer
+from shipping.serializers import ShippingAddressSerializer
 
 
 class BasketLineListAddSerializer(serializers.ModelSerializer):

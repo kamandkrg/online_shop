@@ -16,6 +16,8 @@ class HaveUpdatePermission(BasePermission):
 
     def has_permission(self, request, view):
         user = User.objects.filter(id=request.GET.get('pk'))
+        if request.method == "DELETE" and not (request.user.is_superuser or request.user.is_staff):
+            return False
         if (request.user == user) or request.user.is_superuser or request.user.is_staff:
             return True
         return False

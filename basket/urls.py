@@ -1,6 +1,7 @@
 from django.urls import path
 
-from basket.views import add_to_basket, show_basket, delete_item, basket_checkout, VerifyView
+from basket.views import add_to_basket, show_basket, delete_item, basket_checkout, VerifyView, BasketListAddAPIView, \
+    BasketLineDeleteAPIView, BasketCheckoutListAddAPIView
 
 urlpatterns = [
     path('add/', add_to_basket, name='add-to-basket'),
