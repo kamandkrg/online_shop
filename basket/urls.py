@@ -8,4 +8,9 @@ urlpatterns = [
     path('delete/<int:pk>', delete_item, name='delete-item'),
     path('checkout/', basket_checkout, name='checkout-basket'),
     path('verify/', VerifyView.as_view(), name='verify'),
+    path('api/show-add/', BasketListAddAPIView.as_view(), name='list-add-basket'),
+    path('api/detail-delete/<int:pk>/', BasketLineDeleteAPIView.as_view(), name='delete-item'),
+    path('api/checkout/', BasketCheckoutListAddAPIView.as_view(), name='list-checkout'),
+    path('api/verify/', VerifyView.as_view(), name='verify')
+
 ]
