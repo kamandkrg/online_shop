@@ -1,5 +1,6 @@
 
-from rest_framework.generics import ListCreateAPIView, get_object_or_404, RetrieveUpdateAPIView
+from rest_framework.generics import ListCreateAPIView, get_object_or_404, RetrieveUpdateAPIView, \
+    RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from comment.models import Comment
@@ -13,7 +14,7 @@ class CommentListPostAPIView(ListCreateAPIView):
     permission_classes = (AllowAny, )
 
     def get_permissions(self):
-        if self.action == 'list':
+        if self.request.method == 'GET':
             permission_classes = (AllowAny,)
         else:
             permission_classes = (IsAuthenticated, )
@@ -24,13 +25,14 @@ class CommentListPostAPIView(ListCreateAPIView):
         return qs.filter(product__slug=self.kwargs['slug_product'])
 
     def perform_create(self, serializer):
-        if self.kwargs['comment_id']:
+        comment = None
+        if self.kwargs.get('comment_id', None):
             comment = get_object_or_404(Comment, id=self.kwargs['comment_id'])
         product = get_object_or_404(Product, slug=self.kwargs['slug_product'])
         serializer.save(user=self.request.user, product=product, reply=comment)
 
 
-class CommentUpdateAPIView(RetrieveUpdateAPIView):
+class CommentUpdateAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentListSerializer
     permission_classes = [IsAuthenticated]

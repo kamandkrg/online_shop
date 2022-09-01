@@ -11,7 +11,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView, g
     RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
 from rest_framework.permissions import AllowAny, IsAdminUser
 from product.models import Product, ProductView, ProductRate, ProductImage
-from product.serializers import CreateListProductSerializer, CreateImageSerializer
+from product.serializers import CreateListProductSerializer, CreateImageSerializer, ProductRateSerializer
 
 
 class ProductListAPIView(ListAPIView):
@@ -102,6 +102,20 @@ class ImageRetrieveDestroy(RetrieveDestroyAPIView):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(product__id=self.kwargs['pk_product'])
+
+
+class ProductRateCreateAPIView(ListCreateAPIView):
+    serializer_class = ProductRateSerializer
+    queryset = ProductRate.objects.all()
+
+    def get_queryset(self):
+        qs = super(ProductRateCreateAPIView, self).get_queryset()
+        product = get_object_or_404(Product, slug=self.kwargs['slug_product'])
+        return qs.filter(product=product)
+
+    def perform_create(self, serializer):
+        product = get_object_or_404(Product, slug=self.kwargs['slug_product'])
+        serializer.save(user=self.request.user, product=product)
 
 
 def product_detail(request, product_slug):

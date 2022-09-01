@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
 
 from category.models import Category
-from product.models import ProductImage, Product
+from product.models import ProductImage, Product, ProductRate
 
 
 class CreateImageSerializer(serializers.ModelSerializer):
@@ -12,6 +12,15 @@ class CreateImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
         fields = ('id', 'image', 'product')
+
+
+class ProductRateSerializer(serializers.ModelSerializer):
+    product = serializers.SlugField(source='product.slug', read_only=True)
+    user = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = ProductRate
+        fields = ('product', 'user', 'rate')
 
 
 class CreateListProductSerializer(serializers.ModelSerializer):
