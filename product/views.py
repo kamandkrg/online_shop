@@ -2,17 +2,19 @@ from django.db.models import Count
 from django.shortcuts import render, redirect
 
 from basket.forms import AddToBasketForm
+from category.models import Category
 from comment.forms import CommentForm
 from comment.models import Comment
 from product.forms import ProductRateForm
 from django.db.models import Q
-from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView, get_object_or_404
+from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView, get_object_or_404, \
+    RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
 from rest_framework.permissions import AllowAny, IsAdminUser
 from product.models import Product, ProductView, ProductRate, ProductImage
 from product.serializers import CreateListProductSerializer, CreateImageSerializer
 
 
-class ProductCreateListAPIView(ListCreateAPIView):
+class ProductListAPIView(ListAPIView):
     queryset = Product.objects.all()
     serializer_class = CreateListProductSerializer
 
@@ -24,10 +26,12 @@ class ProductCreateListAPIView(ListCreateAPIView):
         return [permission() for permission in permission_classes]
 
 
-class ProductUpdateDestroyAPIView(RetrieveDestroyAPIView):
+class ProductUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView, CreateAPIView):
     serializer_class = CreateListProductSerializer
     queryset = Product.objects.all()
     permission_classes = [AllowAny]
+    lookup_url_kwarg = 'slug_product'
+    lookup_field = 'slug'
 
     def get_permissions(self):
         if self.request.method == 'GET':
@@ -42,7 +46,7 @@ class ProductUpdateDestroyAPIView(RetrieveDestroyAPIView):
         return CreateListProductSerializer
 
 
-class ProductCategoryList(ListCreateAPIView):
+class ProductCategoryCreateList(ListCreateAPIView):
     serializer_class = CreateListProductSerializer
     queryset = Product.objects.all()
 
@@ -57,6 +61,10 @@ class ProductCategoryList(ListCreateAPIView):
         qs = super().get_queryset()
         slug_category = self.kwargs['slug_category']
         return qs.filter(Q(category__slug=slug_category) | Q(category__parent__slug=slug_category))
+
+    def perform_create(self, serializer):
+        instance = get_object_or_404(Category, slug=self.kwargs['slug_category'])
+        serializer.save(category=instance)
 
 
 class ImageListCreateAPIView(ListCreateAPIView):

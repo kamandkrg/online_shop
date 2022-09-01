@@ -18,8 +18,8 @@ class CreateListProductSerializer(serializers.ModelSerializer):
     create_time = serializers.DateTimeField(read_only=True)
     modified_time = serializers.DateTimeField(read_only=True)
     sale_number = serializers.IntegerField(read_only=True, default=0)
-    images = serializers.SerializerMethodField()
-    category = serializers.SlugField(source='category.slug')
+    images = serializers.SerializerMethodField(read_only=True)
+    category = serializers.SlugField(source='category.slug', allow_blank=True)
 
     class Meta:
         model = Product
@@ -31,9 +31,10 @@ class CreateListProductSerializer(serializers.ModelSerializer):
         serializer = CreateImageSerializer(images, many=True)
         return serializer.data
 
-    def create(self, validated_data):
-        instance = get_object_or_404(Category, slug=validated_data['category']['slug'])
-        validated_data['category'] = instance
-        cr = super().create(validated_data)
+    def update(self, instance, validated_data):
+        validated_data['category'] = get_object_or_404(Category, slug=validated_data['category']['slug'])
+
+        cr = super().update(instance, validated_data)
         return cr
+
 
