@@ -174,5 +174,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ) if DEBUG else (
         'rest_framework_simplejwt.authentication.JWTAuthentication'
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASSES': 'rest_framework.pagination.PageNumberPagination'
 }
