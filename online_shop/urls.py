@@ -20,6 +20,7 @@ from django.conf import settings
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
+    path('', include('home.urls')),
     path('admin/', admin.site.urls),
     path('product/', include('product.urls')),
     path('account/', include('account.urls')),
