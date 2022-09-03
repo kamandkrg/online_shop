@@ -98,7 +98,7 @@ class BasketCheckoutListAddAPIView(ListCreateAPIView):
         return serializer.save(user=self.request.user, basket=basket)
 
 
-class VerifyView(APIView):
+class VerifyViewAPIView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, *args, **kwargs):
@@ -199,6 +199,7 @@ class VerifyView(View):
 
         paid = payment.verify(data)
         if paid:
+            print(211111)
             response.set_cookie('basket_id', None)
         return response
 

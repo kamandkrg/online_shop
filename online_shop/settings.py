@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os.path
 from pathlib import Path
+from datetime import timedelta
 
 # from django.conf.global_settings import AUTH_USER_MODEL
 
@@ -163,6 +164,11 @@ ZARRINPAL = {
     'gateway_request_url': 'https://www.zarinpal.com/pg/services/WebGate/wsdl',
     'gateway_callback_url': 'http://127.0.0.1:8000/basket/verify',
     'merchant_id': ZARRINPAL_MERCHANT_ID
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
 REST_FRAMEWORK = {

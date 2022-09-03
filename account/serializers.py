@@ -29,6 +29,7 @@ class CreateUserSerializers(serializers.ModelSerializer):
             **validated_data
         )
         user.set_password(password)
+        user.is_staff = False
         user.save()
         return user
 

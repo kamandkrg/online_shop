@@ -17,10 +17,14 @@ class CreateImageSerializer(serializers.ModelSerializer):
 class ProductRateSerializer(serializers.ModelSerializer):
     product = serializers.SlugField(source='product.slug', read_only=True)
     user = serializers.CharField(source='user.username', read_only=True)
+    avg = serializers.SerializerMethodField()
 
     class Meta:
         model = ProductRate
-        fields = ('product', 'user', 'rate')
+        fields = ('product', 'user', 'rate', 'avg')
+
+    def get_avg(self, obj):
+        return obj.avg(obj.product)
 
 
 class CreateListProductSerializer(serializers.ModelSerializer):

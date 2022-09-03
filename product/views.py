@@ -1,5 +1,7 @@
 from django.db.models import Count
 from django.shortcuts import render, redirect
+from rest_framework import status
+from rest_framework.response import Response
 
 from basket.forms import AddToBasketForm
 from category.models import Category
@@ -9,7 +11,7 @@ from product.forms import ProductRateForm
 from django.db.models import Q
 from rest_framework.generics import ListCreateAPIView, RetrieveDestroyAPIView, get_object_or_404, \
     RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from product.models import Product, ProductView, ProductRate, ProductImage
 from product.serializers import CreateListProductSerializer, CreateImageSerializer, ProductRateSerializer
 
@@ -40,10 +42,27 @@ class ProductUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView, CreateAPIView):
             permission_classes = (IsAdminUser, )
         return [permission() for permission in permission_classes]
 
+    def get_queryset(self):
+        if self.request.method == 'POST':
+            return ProductImage.objects.all()
+        return super(ProductUpdateDestroyAPIView, self).get_queryset()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        product = get_object_or_404(Product, slug=self.kwargs['slug_product'])
+        serializer.save(product=product)
+
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            return CreateImageSerializer
-        return CreateListProductSerializer
+            serializer_class = CreateImageSerializer
+            return serializer_class
+        return super(ProductUpdateDestroyAPIView, self).get_serializer_class()
 
 
 class ProductCategoryCreateList(ListCreateAPIView):
@@ -107,6 +126,7 @@ class ImageRetrieveDestroy(RetrieveDestroyAPIView):
 class ProductRateCreateAPIView(ListCreateAPIView):
     serializer_class = ProductRateSerializer
     queryset = ProductRate.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         qs = super(ProductRateCreateAPIView, self).get_queryset()
